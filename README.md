@@ -305,7 +305,7 @@ Na tarefa do Teams, entrega:
 > No Windows, `Win + Shift + S` tira um print de uma zona do ecrã.
 
 > [!CAUTION]
-> Prints sem o teu utilizador visível, ou iguais aos de um colega, **não são aceites**. O link tem de ser do **teu** fork, não do repositório do professor.
+> O link tem de ser do **teu** fork, não do repositório do professor.
 
 ---
 
