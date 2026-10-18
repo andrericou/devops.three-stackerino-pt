@@ -54,6 +54,26 @@ app.get("/", async (req, res) => {
     .map((m) => `<li><b>${escapar(m.autor)}</b>: ${escapar(m.texto)} <small>(${m.criada_em})</small></li>`)
     .join("")
 
+  // Consultar o total de mensagens através do backend
+  let totalMensagens
+
+  try {
+    const respostaEstatisticas = await fetch(`${backendUrl}/api/estatisticas`)
+
+    if (!respostaEstatisticas.ok) {
+      throw new Error(`HTTP ${respostaEstatisticas.status}`)
+    }
+
+    const estatisticas = await respostaEstatisticas.json()
+    totalMensagens = estatisticas.total_mensagens
+
+  } catch (err) {
+    console.error("Erro ao obter estatísticas:", err.message)
+    return res.status(502).send(pagina(`
+      <h1>Não foi possível obter as estatísticas</h1>
+      <p>${escapar(err.message)}</p>
+    `))
+  }
   res.send(pagina(`
     <h1>🖥️ Mural do Three-Stackerino</h1>
     <p>Frontend ✅ → Backend ✅ → Base de dados ✅</p>
@@ -63,6 +83,7 @@ app.get("/", async (req, res) => {
       <button>Publicar</button>
     </form>
     <ul>${lista || "<li>Ainda não há mensagens.</li>"}</ul>
+    <p><strong>Total de mensagens: ${totalMensagens}</strong></p>
     <p>Respondido pelo backend número <b>${escapar(data.backend_number)}</b>
        (hostname <code>${escapar(data.backend_hostname)}</code>)</p>
   `))

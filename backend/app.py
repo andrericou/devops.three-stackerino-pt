@@ -69,6 +69,17 @@ def criar_mensagem():
 
     return jsonify({"id": novo_id, "autor": autor, "texto": texto}), 201
 
+@app.get("/api/estatisticas")
+def obter_estatisticas():
+    try:
+        with ligar_bd() as conn:
+            (total,) = conn.execute(
+                "SELECT COUNT(*) FROM mensagens"
+            ).fetchone()
+    except psycopg.Error as err:
+        return erro_bd(err)
+
+    return jsonify({"total_mensagens": total})
 
 # Health-check: o backend está vivo? E consegue falar com a base de dados?
 @app.get("/healthcheck")
